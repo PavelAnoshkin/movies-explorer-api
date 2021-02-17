@@ -10,19 +10,13 @@ const UnauthorizedError = require('../errors/unauthorized-err');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 
-module.exports.getUsers = (req, res, next) => {
-    User.find({})
-        .then((usersData) => res.send({ data: usersData }))
-        .catch(next);
-};
-
-module.exports.getUserById = (req, res, next) => {
-    User.findOne({ _id: req.params.id })
-        .then((userData) => {
-            if (!userData) {
+module.exports.getUser = (req, res, next) => {
+    User.findOne({ _id: req.user._id })
+        .then((user) => {
+            if (!user) {
                 throw new NotFoundError('Пользователь не найден');
             }
-            return res.send({ data: userData });
+            return res.send({ data: user });
         })
         .catch(next);
 };
@@ -30,24 +24,25 @@ module.exports.getUserById = (req, res, next) => {
 module.exports.createUser = (req, res, next) => {
     const {
         name,
-        about,
-        avatar,
         email,
         password,
     } = req.body;
 
     bcrypt.hash(password, 10)
         .then((hash) => User.create({
-            name, about, avatar, email, password: hash,
+            name, email, password: hash,
         }))
-        .then((newUser) => User.findById(newUser._id)
-                .then((foundUser) => res.send({ data: foundUser })))
+        .then((newUser) => {
+            User.findById(newUser._id)
+                .then((foundUser) => res.send({ data: foundUser }))
+        })
         .catch((err) => {
             if (err._message === 'user validation failed') {
                 throw new BadRequestError('Переданы некорректные данные в метод создания пользователя');
             }
+
             if (err.name === 'MongoError' && err.code === 11000) {
-                throw new ConflictError('Пользователь с таким email уже зарегистирован');
+                throw new ConflictError('Пользователь с таким e-mail уже зарегистирован');
             }
 
             return next(err);
@@ -56,13 +51,16 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.updateUser = (req, res, next) => {
-    const { name, about } = req.body;
+    const {
+        name,
+        email,
+    } = req.body;
 
     User.findByIdAndUpdate(
         req.user._id,
         {
             name,
-            about,
+            email,
         },
         {
             new: true,
@@ -84,33 +82,7 @@ module.exports.updateUser = (req, res, next) => {
         .catch(next);
 };
 
-module.exports.updateUserAvatar = (req, res, next) => {
-    const { avatar } = req.body;
-
-    User.findByIdAndUpdate(
-        req.user._id,
-        { avatar },
-        {
-            new: true,
-            runValidators: true,
-        },
-    )
-        .then((updatedUser) => {
-            if (!updatedUser) {
-                throw new NotFoundError('Пользователь не найден');
-            }
-            res.send({ data: updatedUser });
-        })
-        .catch((err) => {
-            if (err._message === 'user validation failed') {
-                throw new BadRequestError('Переданы некорректные данные в метод создания пользователя');
-            }
-            return next(err);
-        })
-        .catch(next);
-};
-
-module.exports.login = (req, res, next) => {
+module.exports.loginUser = (req, res, next) => {
     const { email, password } = req.body;
 
     return User.findUserByCredentials(email, password)
@@ -129,17 +101,6 @@ module.exports.login = (req, res, next) => {
                 throw new UnauthorizedError(err.message);
             }
             return next(err);
-        })
-        .catch(next);
-};
-
-module.exports.getUser = (req, res, next) => {
-    User.findOne({ _id: req.user._id })
-        .then((user) => {
-            if (!user) {
-                throw new NotFoundError('Пользователь не найден');
-            }
-            return res.send({ data: user });
         })
         .catch(next);
 };
