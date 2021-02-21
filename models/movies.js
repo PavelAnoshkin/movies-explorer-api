@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { regexUrl } = require('../utils/constaints');
 
-
 const movieSchema = new mongoose.Schema({
     country: {
         type: String,

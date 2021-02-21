@@ -43,7 +43,7 @@ module.exports.createUser = (req, res, next) => {
         }))
         .then((newUser) => {
             User.findById(newUser._id)
-                .then((foundUser) => res.send({ data: foundUser }))
+                .then((foundUser) => res.send({ data: foundUser }));
         })
         .catch((err) => {
             if (err._message === 'user validation failed') {
