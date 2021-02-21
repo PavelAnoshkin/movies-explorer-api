@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { regexUrl } = require('../utils/constaints');
+
 
 const movieSchema = new mongoose.Schema({
     country: {
@@ -16,6 +18,7 @@ const movieSchema = new mongoose.Schema({
     year: {
         type: String,
         required: true,
+        length: 4,
     },
     description: {
         type: String,
@@ -26,9 +29,7 @@ const movieSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator(movieImageUrl) {
-                //вынести ее в отдельный файл заменить на ссылку из инета
-                const regex = /^https?:\/\/(w{3}\.)?[0-9a-z.]+[a-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*#?$/gi;
-                return regex.test(movieImageUrl);
+                return regexUrl.test(movieImageUrl);
             },
             message: 'Некорректная ссылка на постер фильма',
         },
@@ -38,9 +39,7 @@ const movieSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator(movieTrailerUrl) {
-                //вынести ее в отдельный файл заменить на ссылку из инета
-                const regex = /^https?:\/\/(w{3}\.)?[0-9a-z.]+[a-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*#?$/gi;
-                return regex.test(movieTrailerUrl);
+                return regexUrl.test(movieTrailerUrl);
             },
             message: 'Некорректная ссылка на трейлер фильма',
         },
@@ -50,9 +49,7 @@ const movieSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator(movieThumbnailUrl) {
-                //вынести ее в отдельный файл заменить на ссылку из инета
-                const regex = /^https?:\/\/(w{3}\.)?[0-9a-z.]+[a-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*#?$/gi;
-                return regex.test(movieThumbnailUrl);
+                return regexUrl.test(movieThumbnailUrl);
             },
             message: 'Некорректная ссылка на мини постер фильма',
         },
