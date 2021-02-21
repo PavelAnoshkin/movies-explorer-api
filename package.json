@@ -1,7 +1,7 @@
 {
   "name": "movies-explorer-api",
   "version": "1.0.0",
-  "description": "Mesto Russia. Социальная сеть для лайка фотографий",
+  "description": "Movie. Поиск фильмов на вечер",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
