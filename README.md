@@ -1,5 +1,6 @@
 # movies-explorer-api
 Репозиторий для приложения проекта `Обозреватель фильмов`, включающий бэкенд дипломного проекта приложения со следующими возможностями: авторизации и регистрации пользователей, операции с карточками фильмов и пользователями. 
 
-Внимание!!! Изменилась ссылкa на сайт, размещенный на Яндекс.Облаке
-http://api.paanoshkin.students.nomoredomains.rocks/
+Cсылкa на сайт, размещенный на Яндекс.Облаке
+http://api.panoshkin-dip.students.nomoredomains.rocks/
+https://api.panoshkin-dip.students.nomoredomains.rocks/
