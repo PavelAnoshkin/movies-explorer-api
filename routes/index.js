@@ -10,18 +10,18 @@ const users = require('./users');
 const movies = require('./movies');
 
 router.post('/signin', celebrate({
-    body: Joi.object().keys({
-        email: Joi.string().required().email(),
-        password: Joi.string().required().min(6),
-    }),
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(6),
+  }),
 }), loginUser);
 
 router.post('/signup', celebrate({
-    body: Joi.object().keys({
-        name: Joi.string().required().min(2),
-        email: Joi.string().required().email(),
-        password: Joi.string().required().min(6),
-    }),
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2),
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(6),
+  }),
 }), createUser);
 
 router.use('/', users);

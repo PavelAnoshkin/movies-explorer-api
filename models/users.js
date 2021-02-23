@@ -5,46 +5,46 @@ const validator = require('validator');
 const { loginErrMessage } = require('../utils/constaints');
 
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 2,
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator(email) {
+        return validator.isEmail(email);
+      },
+      message: 'Неверно введен E-mail',
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        validate: {
-            validator(email) {
-                return validator.isEmail(email);
-            },
-            message: 'Неверно введен E-mail',
-        },
-    },
-    password: {
-        type: String,
-        required: true,
-        select: false,
-    },
+  },
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
 });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
-    return this.findOne({ email })
-        .select('+password')
-        .then((user) => {
-            if (!user) {
-                return Promise.reject(new Error(loginErrMessage));
-            }
+  return this.findOne({ email })
+    .select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error(loginErrMessage));
+      }
 
-            return bcrypt.compare(password, user.password)
-                .then((matched) => {
-                    if (!matched) {
-                        return Promise.reject(new Error(loginErrMessage));
-                    }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error(loginErrMessage));
+          }
 
-                    return user;
-                });
+          return user;
         });
+    });
 };
 
 module.exports = mongoose.model('user', userSchema);

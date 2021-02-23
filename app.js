@@ -14,8 +14,8 @@ const errorHandler = require('./middlewares/errorhandler');
 const limiter = require('./middlewares/ratelimiter');
 
 const {
-    mongoConnection,
-    port,
+  mongoConnection,
+  port,
 } = require('./utils/sysconstaints');
 
 const { PORT = port } = process.env;
@@ -23,9 +23,9 @@ const { PORT = port } = process.env;
 const app = express();
 
 mongoose.connect(mongoConnection, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
 });
 
 app.use(limiter);

@@ -8,26 +8,26 @@ const { authFailErrMessage } = require('../utils/constaints');
 const { jwtDev } = require('../utils/sysconstaints');
 
 module.exports = (req, res, next) => {
-    const { authorization } = req.headers;
-    let token;
-    let payload;
+  const { authorization } = req.headers;
+  let token;
+  let payload;
 
-    try {
-        token = authorization.replace('Bearer ', '');
+  try {
+    token = authorization.replace('Bearer ', '');
 
-        if (!authorization || !authorization.startsWith('Bearer ')) {
-            return next(new UnauthorizedError(authFailErrMessage));
-        }
-
-        payload = jwt.verify(
-            token,
-            NODE_ENV === 'production' ? JWT_SECRET : jwtDev,
-        );
-    } catch (e) {
-        return next(new UnauthorizedError(authFailErrMessage));
+    if (!authorization || !authorization.startsWith('Bearer ')) {
+      return next(new UnauthorizedError(authFailErrMessage));
     }
 
-    req.user = payload;
+    payload = jwt.verify(
+      token,
+      NODE_ENV === 'production' ? JWT_SECRET : jwtDev,
+    );
+  } catch (e) {
+    return next(new UnauthorizedError(authFailErrMessage));
+  }
 
-    return next();
+  req.user = payload;
+
+  return next();
 };
