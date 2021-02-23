@@ -3,12 +3,14 @@ const Movie = require('../models/movies');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
+const ForbiddenError = require('../errors/forbidden-err');
 
 const {
   movieCreateErrMessage,
   movieNotFoundErrMessage,
   movieDeleteMessage,
   movieCreateConflictErrMessage,
+  movieDeleteForbiddedErrMessage,
 } = require('../utils/constaints');
 
 module.exports.getMovies = (req, res, next) => {
@@ -72,15 +74,23 @@ module.exports.createMovie = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  Movie.findOneAndDelete({
-    movieId: req.params.movieId,
-    owner: req.user._id,
-  })
+  Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError(movieNotFoundErrMessage);
       }
-      return res.send({ message: movieDeleteMessage });
+      if (movie.owner._id.toString() !== req.user._id) {
+        throw new ForbiddenError(movieDeleteForbiddedErrMessage);
+      }
+
+      return Movie.findByIdAndRemove(req.params.movieId)
+        .then((deletedMovie) => {
+          if (!deletedMovie) {
+            throw new NotFoundError(movieNotFoundErrMessage);
+          }
+
+          return res.send({ message: movieDeleteMessage });
+        });
     })
     .catch(next);
 };

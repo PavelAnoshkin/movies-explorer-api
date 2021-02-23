@@ -1,4 +1,4 @@
-const regexUrl = /^https?:\/\/(w{3}\.)?[0-9a-z.]+[a-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*#?$/i;
+const regexUrl = /^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/i;
 const regexYear = /^[0-9]{4}$/i;
 
 const routeNotFoundErrMessage = 'Указанный ресурс не найден';
@@ -13,6 +13,7 @@ const movieCreateErrMessage = 'Переданы некорректные дан�
 const movieNotFoundErrMessage = 'Карточка фильма не найдена';
 const movieDeleteMessage = 'Карточка фильма удалена';
 const movieCreateConflictErrMessage = 'Карточка фильма уже добавлена';
+const movieDeleteForbiddedErrMessage = 'Запрещено удалять чужие карточки фильмов';
 
 module.exports = {
   regexUrl,
@@ -29,4 +30,5 @@ module.exports = {
   movieNotFoundErrMessage,
   movieDeleteMessage,
   movieCreateConflictErrMessage,
+  movieDeleteForbiddedErrMessage,
 };

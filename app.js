@@ -18,21 +18,24 @@ const {
   port,
 } = require('./utils/sysconstaints');
 
-const { PORT = port } = process.env;
+const {
+  PORT = port,
+  MONGO_CONNECTION = mongoConnection,
+} = process.env;
 
 const app = express();
 
-mongoose.connect(mongoConnection, {
+mongoose.connect(MONGO_CONNECTION, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
 });
 
+app.use(requestLogger);
 app.use(limiter);
 app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json());
-app.use(requestLogger);
 
 app.use('/', router);
 

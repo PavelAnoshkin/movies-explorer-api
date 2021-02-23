@@ -15,7 +15,7 @@ movies.get('/movies', auth, getMovies);
 
 movies.post('/movies', celebrate({
   body: Joi.object().keys({
-    movieId: Joi.string().required(),
+    movieId: Joi.number().integer().required(),
     country: Joi.string().required().min(2),
     director: Joi.string().required().min(2),
     duration: Joi.number().integer().required(),
@@ -31,7 +31,7 @@ movies.post('/movies', celebrate({
 
 movies.delete('/movies/:movieId', celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().required(),
+    movieId: Joi.string().hex().length(24).required(),
   }),
 }), auth, deleteMovie);
 
