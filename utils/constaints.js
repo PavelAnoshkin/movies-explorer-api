@@ -12,7 +12,7 @@ const userEmailConflictErrMessage = 'Пользователь с таким e-ma
 const movieCreateErrMessage = 'Переданы некорректные данные в метод создания карточки фильма';
 const movieNotFoundErrMessage = 'Карточка фильма не найдена';
 const movieDeleteMessage = 'Карточка фильма удалена';
-const movieCreateConflictErrMessage = 'Карточка фильма уже добавлена';
+const movieCreateConflictErrMessage = 'Карточка фильма уже в коллекции';
 const movieDeleteForbiddedErrMessage = 'Запрещено удалять чужие карточки фильмов';
 
 module.exports = {
